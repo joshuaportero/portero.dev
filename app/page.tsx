@@ -1,103 +1,126 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const projects = [
+  {
+    name: "portero/nexus",
+    url: "https://github.com/joshuaportero/nexus",
+    description:
+      "A Spring Boot microservices backend that powers the Helium e-commerce platform, providing secure and scalable RESTful APIs for product, order, and user management.",
+  },
+  {
+    name: "portero/helium",
+    url: "https://github.com/joshuaportero/helium",
+    description:
+      "A modern, responsive frontend for the Nexus platform built with Next.js, offering intuitive interfaces for managing e-commerce products, inventory, and user workflows.",
+  },
+  {
+    name: "portero/amazon-job-scraper",
+    url: "https://github.com/joshuaportero/amazon-job-scraper",
+    description:
+      "A command-line Java utility that automates job scraping from Amazon's career site to assist in targeted job discovery.",
+  },
+  {
+    name: "portero/java-reflection-test",
+    url: "https://github.com/joshuaportero/java-reflection-test",
+    description:
+      "A simple Java project demonstrating the use of reflection to dynamically invoke methods and access fields, showcasing the power and flexibility of Java's reflection API.",
+  },
+  {
+    name: "portero/spring-boot-microservices-template",
+    url: "https://github.com/joshuaportero/spring-boot-microservices-template",
+    description:
+      "A template project for building Spring Boot microservices, featuring essential configurations and best practices for rapid development.",
+  },
+  {
+    name: "axieum/authme",
+    url: "https://github.com/axieum/authme",
+    description:
+      "A convenience-focused Minecraft mod that simplifies the process of managing multiple game accounts from within the client.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-h-screen bg-whitetransition-colors">
+      <div className="mx-auto max-w-2xl px-6 py-16">
+        <header className="flex items-start justify-between">
+          <div className="space-y-4">
+            <h1 className="text-2xl font-medium text-gray-900 mb-4">
+              Joshua Portero
+            </h1>
+            <div className="space-y-4">
+              <p className="text-gray-600">
+                Hello! I&apos;m <strong>Josh</strong>!, a Computer Science
+                student graduating in <strong>May 2026</strong>.
+              </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+              <p className="text-gray-600 space-x-2">
+                I love working with code. Whether it&apos;s building apps,
+                automating tasks, or exploring new tech, I&apos;m always excited
+                to learn and create.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <section className="mt-6">
+          <h2 className="text-lg font-medium text-gray-900 mb-6">Projects</h2>
+
+          <div className="space-y-4">
+            {projects.map((project) => (
+              <div key={project.name} className="group">
+                <Link
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <div className="flex flex-col space-y-1">
+                    <span className="text-gray-900 font-mono text-sm group-hover:text-blue-600 transition-colors">
+                      {project.name}
+                    </span>
+                    <span className="text-gray-500 text-sm">
+                      {project.description}
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <footer className="mt-8 pt-4 border-t border-gray-200">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-sm space-y-4 sm:space-y-0">
+            <div className="flex flex-wrap gap-x-6">
+              <Link
+                href="mailto:joshua@portero.dev"
+                className="text-gray-900 font-mono text-sm hover:text-blue-600 transition-colors"
+              >
+                Email
+              </Link>
+              <Link
+                href="https://github.com/joshuaportero"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-900 hover:text-blue-600 transition-colors"
+              >
+                GitHub
+              </Link>
+              <Link
+                href="https://linkedin.com/in/joshua-portero/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-900 hover:text-blue-600 transition-colors"
+              >
+                LinkedIn
+              </Link>
+            </div>
+            <p className="text-gray-500 text-sm text-center sm:text-right">
+              © 2025 Joshua Portero. All rights reserved.
+            </p>
+          </div>
+        </footer>
+      </div>
+    </main>
   );
 }
