@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 
 const projects = [
@@ -42,15 +42,10 @@ const projects = [
 
 import { useEffect } from "react";
 
-export function AnalyticsPing() {
-  useEffect(() => {
+export default function Home() {
+    useEffect(() => {
     fetch("/api/track", { method: "POST" }).catch(() => {});
   }, []);
-  return null;
-}
-
-export default function Home() {
-  AnalyticsPing();
   return (
     <main className="min-h-screen bg-whitetransition-colors">
       <div className="mx-auto max-w-2xl px-6 py-16">
