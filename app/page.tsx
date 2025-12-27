@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 
 const projects = [
@@ -39,7 +40,17 @@ const projects = [
   },
 ];
 
+import { useEffect } from "react";
+
+export function AnalyticsPing() {
+  useEffect(() => {
+    fetch("/api/track", { method: "POST" }).catch(() => {});
+  }, []);
+  return null;
+}
+
 export default function Home() {
+  AnalyticsPing();
   return (
     <main className="min-h-screen bg-whitetransition-colors">
       <div className="mx-auto max-w-2xl px-6 py-16">
@@ -53,7 +64,6 @@ export default function Home() {
                 Hello! I&apos;m <strong>Josh</strong>!, a Computer Science
                 student graduating in <strong>May 2026</strong>.
               </p>
-
               <p className="text-gray-600 space-x-2">
                 I love working with code. Whether it&apos;s building apps,
                 automating tasks, or exploring new tech, I&apos;m always excited
