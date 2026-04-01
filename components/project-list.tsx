@@ -1,8 +1,8 @@
 "use client"
 
-import { GitBranch, Tag, Search, ChevronDown, FolderOpen, FileCode, ExternalLink } from "lucide-react"
+import { GitBranch, Tag, Search, ChevronDown, FolderOpen, FileCode, ExternalLink, History, MoreHorizontal, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const projects = [
   {
@@ -73,6 +73,38 @@ const projects = [
 
 export function ProjectList() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [commitData, setCommitData] = useState<any>(null)
+  const [commitCount, setCommitCount] = useState<string>("14")
+  const [branchCount, setBranchCount] = useState<number>(3)
+  const [tagCount, setTagCount] = useState<number>(0)
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/joshuaportero/portero.dev/commits?per_page=1")
+      .then((res) => {
+        const link = res.headers.get("link")
+        if (link) {
+          const match = link.match(/page=(\d+)>; rel="last"/)
+          if (match) setCommitCount(match[1])
+        }
+        return res.json()
+      })
+      .then((data) => {
+        if (data && data.length > 0) setCommitData(data[0])
+      })
+      .catch((err) => console.error("Failed to fetch commits", err))
+
+    fetch("https://api.github.com/repos/joshuaportero/portero.dev/branches")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setBranchCount(data.length)
+      }).catch(err => console.error(err))
+
+    fetch("https://api.github.com/repos/joshuaportero/portero.dev/tags")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setTagCount(data.length)
+      }).catch(err => console.error(err))
+  }, [])
 
   const filteredProjects = projects.filter(
     (project) =>
@@ -80,6 +112,38 @@ export function ProjectList() {
       project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.tech.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()))
   )
+
+  const authorName = commitData?.commit?.author?.name || "joshuaportero"
+  const authorAvatarUrl = commitData?.author?.avatar_url
+  const commitMessage = commitData?.commit?.message || "Updated portfolio with new projects"
+  const shortCommitMessage = commitMessage.split('\n')[0]
+  const commitSha = commitData?.sha?.substring(0, 7) || "a87d173"
+  const commitDateRaw = commitData?.commit?.author?.date
+  const commitDate = commitDateRaw ? new Date(commitDateRaw) : null
+  
+  let timeAgo = "last week"
+  if (commitDate) {
+    const seconds = Math.floor((new Date().getTime() - commitDate.getTime()) / 1000)
+    let interval = seconds / 31536000
+    if (interval > 1) { timeAgo = Math.floor(interval) + " years ago" }
+    else {
+      interval = seconds / 2592000
+      if (interval > 1) timeAgo = Math.floor(interval) + " months ago"
+      else {
+        interval = seconds / 86400
+        if (interval > 1) timeAgo = Math.floor(interval) + " days ago"
+        else {
+          interval = seconds / 3600
+          if (interval > 1) timeAgo = Math.floor(interval) + " hours ago"
+          else {
+            interval = seconds / 60
+            if (interval > 1) timeAgo = Math.floor(interval) + " minutes ago"
+            else timeAgo = Math.floor(seconds) + " seconds ago"
+          }
+        }
+      }
+    }
+  }
 
   return (
     <div className="border border-[#30363d] rounded-md overflow-hidden">
@@ -98,11 +162,11 @@ export function ProjectList() {
         <div className="flex items-center gap-4 text-sm text-[#8b949e]">
           <span className="flex items-center gap-1">
             <GitBranch className="h-4 w-4" />
-            <span className="font-semibold text-[#e6edf3]">3</span> Branches
+            <span className="font-semibold text-[#e6edf3]">{branchCount}</span> Branches
           </span>
           <span className="flex items-center gap-1">
             <Tag className="h-4 w-4" />
-            <span className="font-semibold text-[#e6edf3]">0</span> Tags
+            <span className="font-semibold text-[#e6edf3]">{tagCount}</span> Tags
           </span>
         </div>
 
@@ -138,18 +202,42 @@ export function ProjectList() {
       </div>
 
       {/* Latest Commit Info */}
-      <div className="flex items-center gap-3 px-4 py-3 bg-[#161b22] border-b border-[#30363d]">
-        <div className="h-6 w-6 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-medium">
-          J
+      <div className="flex items-center gap-2 px-4 py-3 bg-[#161b22] border-b border-[#30363d] overflow-hidden md:gap-3">
+        <div className="h-6 w-6 rounded-full overflow-hidden bg-[#21262d] flex items-center justify-center shrink-0">
+          {authorAvatarUrl ? (
+            <img src={authorAvatarUrl} alt={authorName} className="h-full w-full object-cover" />
+          ) : (
+             <div className="h-full w-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-medium">
+              {authorName.charAt(0).toUpperCase()}
+            </div>
+          )}
         </div>
-        <span className="text-sm">
-          <span className="font-semibold text-[#e6edf3]">joshuaportero</span>
-          <span className="text-[#8b949e] ml-2">Updated portfolio with new projects</span>
-        </span>
-        <span className="text-xs text-[#8b949e] ml-auto hidden sm:block">a87d173 · last week</span>
-        <span className="text-sm text-[#8b949e] flex items-center gap-1 hidden sm:flex">
-          <span className="text-[#58a6ff]">14 Commits</span>
-        </span>
+        
+        <div className="flex items-center flex-1 min-w-0">
+          <span className="font-semibold text-sm text-[#e6edf3] shrink-0 mr-2 hover:text-[#58a6ff] hover:underline cursor-pointer">
+            {authorName}
+          </span>
+          <span className="text-sm text-[#8b949e] truncate hover:text-[#58a6ff] hover:underline cursor-pointer">
+            {shortCommitMessage}
+          </span>
+          <button className="shrink-0 ml-1 text-[#8b949e] hover:text-[#c9d1d9] bg-[#21262d] hover:bg-[#30363d] rounded px-1 hidden sm:block">
+            <MoreHorizontal className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="flex items-center gap-3 shrink-0">
+          <Check className="h-4 w-4 text-[#238636] shrink-0 hidden md:block" />
+          <span className="text-xs text-[#8b949e] hidden sm:block font-mono">
+            <span className="hover:text-[#58a6ff] hover:underline cursor-pointer">{commitSha}</span>
+            <span className="mx-1">·</span>
+            <span className="hover:text-[#58a6ff] hover:underline cursor-pointer">{timeAgo}</span>
+          </span>
+          
+          <div className="flex items-center gap-1.5 ml-1 text-[#e6edf3] hover:text-[#58a6ff] cursor-pointer group hover:underline">
+             <History className="h-4 w-4 text-[#8b949e] group-hover:text-[#58a6ff]" />
+             <span className="text-xs font-semibold"><span className="hidden sm:inline">{commitCount}</span> Commits</span>
+          </div>
+        </div>
       </div>
 
       {/* Project List */}

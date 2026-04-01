@@ -2,8 +2,30 @@
 
 import { BookOpen, Pin, Eye, GitFork, Star, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
 
 export function RepoHeader() {
+  const [repoData, setRepoData] = useState<{
+    subscribers_count: number
+    forks_count: number
+    stargazers_count: number
+  } | null>(null)
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/joshuaportero/portero.dev")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && typeof data.stargazers_count === "number") {
+          setRepoData({
+            subscribers_count: data.subscribers_count,
+            forks_count: data.forks_count,
+            stargazers_count: data.stargazers_count,
+          })
+        }
+      })
+      .catch((err) => console.error("Failed to fetch repo data", err))
+  }, [])
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-center gap-2">
@@ -33,7 +55,7 @@ export function RepoHeader() {
             className="bg-[#21262d] border-[#30363d] text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e] rounded-r-none h-8"
           >
             <Eye className="h-4 w-4 mr-1" />
-            Unwatch
+            Watch
             <ChevronDown className="h-3 w-3 ml-1" />
           </Button>
           <Button
@@ -41,7 +63,7 @@ export function RepoHeader() {
             size="sm"
             className="bg-[#21262d] border-[#30363d] border-l-0 text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e] rounded-l-none px-2 h-8"
           >
-            1
+            {repoData?.subscribers_count ?? 1}
           </Button>
         </div>
 
@@ -60,7 +82,7 @@ export function RepoHeader() {
             size="sm"
             className="bg-[#21262d] border-[#30363d] border-l-0 text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e] rounded-l-none px-2 h-8"
           >
-            0
+            {repoData?.forks_count ?? 0}
           </Button>
         </div>
 
@@ -79,7 +101,7 @@ export function RepoHeader() {
             size="sm"
             className="bg-[#21262d] border-[#30363d] border-l-0 text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e] rounded-l-none px-2 h-8"
           >
-            0
+            {repoData?.stargazers_count ?? 0}
           </Button>
         </div>
       </div>
