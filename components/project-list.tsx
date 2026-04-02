@@ -1,70 +1,62 @@
 "use client"
 
 import { GitBranch, Tag, Search, ChevronDown, FolderOpen, FileCode, ExternalLink, History, MoreHorizontal, Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
-
+import { fetchWithCache } from "@/lib/cache-fetch"
+import Image from "next/image"
 const projects = [
   {
-    name: "atlas",
-    description: "Core RPG plugin for quests, combat, progression, and world events",
-    tech: ["Java", "Gradle"],
-    updated: "last year",
+    name: "software-developer-freelance",
+    description: "Designed 80+ custom software solutions, engineered backend systems, established CI/CD workflows.",
+    tech: ["OpenTelemetry", "Docker", "Java"],
+    updated: "Jun 2019",
     type: "folder",
     link: "#",
   },
   {
-    name: "pixel-ui",
-    description: "A modern React component library with pixel-perfect designs",
-    tech: ["TypeScript", "React"],
-    updated: "3 months ago",
+    name: "uuid-resolver-service",
+    description: "Serverless profile management service using Cloudflare Workers, TypeScript, and Hono framework.",
+    tech: ["TypeScript", "Hono", "Cloudflare"],
+    updated: "Dec 2024",
     type: "folder",
     link: "#",
   },
   {
-    name: "cloud-functions",
-    description: "Serverless functions for handling API requests and webhooks",
-    tech: ["Node.js", "Firebase"],
-    updated: "6 months ago",
+    name: "e-commerce-platform",
+    description: "Distributed e-commerce backend using Spring Boot Microservices, RabbitMQ, Hystrix, and Zipkin.",
+    tech: ["Spring Boot", "RabbitMQ", "Docker", "Microservices"],
+    updated: "Jan 2022",
     type: "folder",
     link: "#",
   },
   {
-    name: "data-viz",
-    description: "Interactive data visualization dashboard built with D3.js",
-    tech: ["JavaScript", "D3.js"],
-    updated: "1 year ago",
+    name: "plugin-development-toolkit",
+    description: "Reusable development framework to accelerate API creation with Redis synchronisation.",
+    tech: ["Java", "Redis", "Jenkins"],
+    updated: "Jun 2019",
     type: "folder",
     link: "#",
   },
   {
-    name: "mobile-app",
-    description: "Cross-platform mobile application for task management",
-    tech: ["React Native", "TypeScript"],
-    updated: "8 months ago",
-    type: "folder",
+    name: "demo",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    tech: [],
+    updated: "Sep 2023 - May 2026",
+    type: "file",
     link: "#",
   },
   {
-    name: "api-gateway",
-    description: "RESTful API gateway with authentication and rate limiting",
-    tech: ["Go", "Docker"],
-    updated: "4 months ago",
-    type: "folder",
+    name: "demo",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    tech: [],
+    updated: "May 2023",
+    type: "file",
     link: "#",
   },
   {
-    name: "ml-models",
-    description: "Machine learning models for sentiment analysis and prediction",
-    tech: ["Python", "TensorFlow"],
-    updated: "2 months ago",
-    type: "folder",
-    link: "#",
-  },
-  {
-    name: "portfolio-site",
-    description: "This portfolio website built with Next.js and Tailwind CSS",
-    tech: ["Next.js", "TypeScript"],
+    name: "demo",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    tech: ["PDF"],
     updated: "just now",
     type: "file",
     link: "#",
@@ -74,12 +66,12 @@ const projects = [
 export function ProjectList() {
   const [searchQuery, setSearchQuery] = useState("")
   const [commitData, setCommitData] = useState<any>(null)
-  const [commitCount, setCommitCount] = useState<string>("14")
-  const [branchCount, setBranchCount] = useState<number>(3)
+  const [commitCount, setCommitCount] = useState<string>("1")
+  const [branchCount, setBranchCount] = useState<number>(1)
   const [tagCount, setTagCount] = useState<number>(0)
 
   useEffect(() => {
-    fetch("https://api.github.com/repos/joshuaportero/portero.dev/commits?per_page=1")
+    fetchWithCache("https://api.github.com/repos/joshuaportero/portero.dev/commits?per_page=1")
       .then((res) => {
         const link = res.headers.get("link")
         if (link) {
@@ -93,13 +85,13 @@ export function ProjectList() {
       })
       .catch((err) => console.error("Failed to fetch commits", err))
 
-    fetch("https://api.github.com/repos/joshuaportero/portero.dev/branches")
+    fetchWithCache("https://api.github.com/repos/joshuaportero/portero.dev/branches")
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setBranchCount(data.length)
       }).catch(err => console.error(err))
 
-    fetch("https://api.github.com/repos/joshuaportero/portero.dev/tags")
+    fetchWithCache("https://api.github.com/repos/joshuaportero/portero.dev/tags")
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setTagCount(data.length)
@@ -113,7 +105,7 @@ export function ProjectList() {
       project.tech.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
-  const authorName = commitData?.commit?.author?.name || "joshuaportero"
+  const authorName = commitData?.commit?.author?.login || "joshuaportero"
   const authorAvatarUrl = commitData?.author?.avatar_url
   const commitMessage = commitData?.commit?.message || "Updated portfolio with new projects"
   const shortCommitMessage = commitMessage.split('\n')[0]
@@ -189,12 +181,16 @@ export function ProjectList() {
       {/* Latest Commit Info */}
       <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.01] border-b border-white/10 overflow-hidden md:gap-3 transition-colors hover:bg-white/[0.03]">
         <div className="h-6 w-6 rounded-full overflow-hidden bg-[#21262d] flex items-center justify-center shrink-0 ring-1 ring-white/10 shadow-[0_0_8px_rgba(88,166,255,0.15)]">
-          <img src={authorAvatarUrl || "https://github.com/joshuaportero.png"} alt={authorName} className="h-full w-full object-cover" />
+          <a href="https://github.com/joshuaportero">
+            <Image src={authorAvatarUrl || "https://github.com/joshuaportero.png"} alt={authorName} width={24} height={24} className="h-full w-full object-cover" />
+          </a>
         </div>
 
         <div className="flex items-center flex-1 min-w-0">
           <span className="font-semibold text-sm text-[#e6edf3] shrink-0 mr-2 hover:text-[#58a6ff] hover:underline cursor-pointer">
-            {authorName}
+            <a href="https://github.com/joshuaportero">
+              {authorName}
+            </a>
           </span>
           <span className="text-sm text-[#8b949e] truncate hover:text-[#58a6ff] hover:underline cursor-pointer">
             {shortCommitMessage}
@@ -242,7 +238,7 @@ export function ProjectList() {
                   </span>
                   <ExternalLink className="h-3 w-3 text-[#8b949e] opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <p className="text-xs text-[#8b949e] truncate mt-0.5">{project.description}</p>
+                <p className="text-sm text-[#8b949e] truncate mt-0.5">{project.description}</p>
               </div>
 
               <div className="hidden md:flex items-center gap-2 shrink-0">
