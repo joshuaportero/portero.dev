@@ -120,7 +120,7 @@ export function ProjectList() {
   const commitSha = commitData?.sha?.substring(0, 7) || "a87d173"
   const commitDateRaw = commitData?.commit?.author?.date
   const commitDate = commitDateRaw ? new Date(commitDateRaw) : null
-  
+
   let timeAgo = "last week"
   if (commitDate) {
     const seconds = Math.floor((new Date().getTime() - commitDate.getTime()) / 1000)
@@ -146,27 +146,27 @@ export function ProjectList() {
   }
 
   return (
-    <div className="border border-[#30363d] rounded-md overflow-hidden">
+    <div className="rounded-md overflow-hidden bg-[#0d1117]/50 backdrop-blur-sm ring-1 ring-white/10">
       {/* Branch/Tag Selector */}
-      <div className="flex flex-wrap items-center gap-2 p-3 bg-[#161b22] border-b border-[#30363d]">
-        <Button
-          variant="outline"
-          size="sm"
-          className="bg-[#21262d] border-[#30363d] text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e] h-8"
-        >
-          <GitBranch className="h-4 w-4 mr-1" />
-          main
-          <ChevronDown className="h-3 w-3 ml-1" />
-        </Button>
+      <div className="flex flex-wrap items-center gap-2 p-3 bg-white/[0.02] border-b border-white/10">
 
         <div className="flex items-center gap-4 text-sm text-[#8b949e]">
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-2 hover:text-[#e6edf3]">
             <GitBranch className="h-4 w-4" />
-            <span className="font-semibold text-[#e6edf3]">{branchCount}</span> Branches
+            <span className="font-semibold text-[#e6edf3]">main</span>
+            <ChevronDown className="h-3 w-3" />
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-2">
+            <GitBranch className="h-4 w-4" />
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-[#e6edf3]">{branchCount}</span> Branches
+            </div>
+          </span>
+          <span className="flex items-center gap-2">
             <Tag className="h-4 w-4" />
-            <span className="font-semibold text-[#e6edf3]">{tagCount}</span> Tags
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-[#e6edf3]">{tagCount}</span> Tags
+            </div>
           </span>
         </div>
 
@@ -183,36 +183,15 @@ export function ProjectList() {
               className="w-[200px] bg-[#0d1117] border border-[#30363d] rounded-md py-1 pl-8 pr-3 text-sm text-[#e6edf3] placeholder:text-[#8b949e] focus:outline-none focus:border-[#388bfd]"
             />
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="bg-[#21262d] border-[#30363d] text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e] h-8"
-          >
-            Add file
-            <ChevronDown className="h-3 w-3 ml-1" />
-          </Button>
-          <Button
-            size="sm"
-            className="bg-[#238636] hover:bg-[#2ea043] text-white h-8"
-          >
-            <span className="mr-1">{"<>"}</span> Code
-            <ChevronDown className="h-3 w-3 ml-1" />
-          </Button>
         </div>
       </div>
 
       {/* Latest Commit Info */}
-      <div className="flex items-center gap-2 px-4 py-3 bg-[#161b22] border-b border-[#30363d] overflow-hidden md:gap-3">
-        <div className="h-6 w-6 rounded-full overflow-hidden bg-[#21262d] flex items-center justify-center shrink-0">
-          {authorAvatarUrl ? (
-            <img src={authorAvatarUrl} alt={authorName} className="h-full w-full object-cover" />
-          ) : (
-             <div className="h-full w-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-medium">
-              {authorName.charAt(0).toUpperCase()}
-            </div>
-          )}
+      <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.01] border-b border-white/10 overflow-hidden md:gap-3 transition-colors hover:bg-white/[0.03]">
+        <div className="h-6 w-6 rounded-full overflow-hidden bg-[#21262d] flex items-center justify-center shrink-0 ring-1 ring-white/10 shadow-[0_0_8px_rgba(88,166,255,0.15)]">
+          <img src={authorAvatarUrl || "https://github.com/joshuaportero.png"} alt={authorName} className="h-full w-full object-cover" />
         </div>
-        
+
         <div className="flex items-center flex-1 min-w-0">
           <span className="font-semibold text-sm text-[#e6edf3] shrink-0 mr-2 hover:text-[#58a6ff] hover:underline cursor-pointer">
             {authorName}
@@ -232,23 +211,24 @@ export function ProjectList() {
             <span className="mx-1">·</span>
             <span className="hover:text-[#58a6ff] hover:underline cursor-pointer">{timeAgo}</span>
           </span>
-          
+
           <div className="flex items-center gap-1.5 ml-1 text-[#e6edf3] hover:text-[#58a6ff] cursor-pointer group hover:underline">
-             <History className="h-4 w-4 text-[#8b949e] group-hover:text-[#58a6ff]" />
-             <span className="text-xs font-semibold"><span className="hidden sm:inline">{commitCount}</span> Commits</span>
+            <History className="h-4 w-4 text-[#8b949e] group-hover:text-[#58a6ff]" />
+            <span className="text-xs font-semibold">{commitCount} Commits</span>
           </div>
         </div>
       </div>
 
       {/* Project List */}
-      <div className="divide-y divide-[#21262d]">
+      <div className="divide-y divide-white/5">
         {filteredProjects.length > 0 ? (
           filteredProjects.map((project) => (
             <a
               key={project.name}
               href={project.link}
-              className="flex items-center gap-3 px-4 py-2 hover:bg-[#161b22] group"
+              className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-all duration-300 group relative border-l-2 border-transparent hover:border-[#58a6ff]"
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#58a6ff]/0 via-[#58a6ff]/5 to-[#58a6ff]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               {project.type === "folder" ? (
                 <FolderOpen className="h-4 w-4 text-[#8b949e] shrink-0" />
               ) : (
@@ -269,7 +249,7 @@ export function ProjectList() {
                 {project.tech.map((t) => (
                   <span
                     key={t}
-                    className="px-2 py-0.5 text-xs bg-[#21262d] text-[#8b949e] rounded-full"
+                    className="px-2 py-0.5 text-xs bg-white/5 text-[#8b949e] rounded-full ring-1 ring-white/10 group-hover:ring-[#58a6ff]/30 transition-colors"
                   >
                     {t}
                   </span>
@@ -284,30 +264,6 @@ export function ProjectList() {
             No projects found matching "<span className="text-[#e6edf3]">{searchQuery}</span>"
           </div>
         )}
-      </div>
-
-      {/* README Section */}
-      <div className="border-t border-[#30363d]">
-        <div className="flex items-center gap-2 px-4 py-3 bg-[#161b22] border-b border-[#30363d]">
-          <FileCode className="h-4 w-4 text-[#8b949e]" />
-          <span className="text-sm font-semibold text-[#e6edf3]">README</span>
-          <span className="text-xs px-1.5 py-0.5 bg-[#388bfd33] text-[#58a6ff] rounded">md</span>
-        </div>
-        <div className="px-6 py-8 text-center">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-lg bg-[#21262d] mb-4">
-            <FileCode className="h-8 w-8 text-[#8b949e]" />
-          </div>
-          <h3 className="text-lg font-semibold text-[#e6edf3] mb-2">Welcome to my Portfolio</h3>
-          <p className="text-sm text-[#8b949e] max-w-md mx-auto mb-4">
-            Hi! I&apos;m Joshua Portero, a full-stack developer passionate about building great software.
-            Browse through my projects above to see what I&apos;ve been working on.
-          </p>
-          <Button
-            className="bg-[#238636] hover:bg-[#2ea043] text-white"
-          >
-            View Full README
-          </Button>
-        </div>
       </div>
     </div>
   )

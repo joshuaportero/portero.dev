@@ -20,7 +20,7 @@ import {
 
 export function GitHubHeader() {
   return (
-    <header className="bg-[#010409] border-b border-[#30363d] px-4 py-3">
+    <header className="bg-[#010409]/80 backdrop-blur-md border-b border-white/5 shadow-sm px-4 py-3 sticky top-0 z-50 transition-colors duration-300">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" className="lg:hidden text-[#e6edf3] hover:bg-[#21262d]">
@@ -89,10 +89,8 @@ export function GitHubHeader() {
           {/* Avatar */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="hover:bg-[#21262d] rounded-full p-0 h-8 w-8">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-sm font-medium">
-                  J
-                </div>
+              <Button variant="ghost" size="icon" className="hover:bg-white/5 rounded-full p-0 h-8 w-8 ring-1 ring-white/10 shadow-[0_0_10px_rgba(88,166,255,0.15)] overflow-hidden">
+                <img src="https://github.com/joshuaportero.png" alt="Profile" className="h-full w-full object-cover" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-[#161b22] border-[#30363d] w-[200px]">
