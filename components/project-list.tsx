@@ -38,7 +38,7 @@ const projects = [
     link: "#",
   },
   {
-    name: "demo",
+    name: "demo1",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     tech: [],
     updated: "Sep 2023 - May 2026",
@@ -46,7 +46,7 @@ const projects = [
     link: "#",
   },
   {
-    name: "demo",
+    name: "demo2",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     tech: [],
     updated: "May 2023",
@@ -54,7 +54,7 @@ const projects = [
     link: "#",
   },
   {
-    name: "demo",
+    name: "demo3",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     tech: ["PDF"],
     updated: "just now",
